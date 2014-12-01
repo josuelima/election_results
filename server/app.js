@@ -25,7 +25,12 @@ app.get('/votes', votes.get);
 /**
  * Saves candidate
  */
-app.post('/candidates', candidates.save);
+app.post('/candidates', candidates.save, candidates.send);
+
+/**
+ * Get candidates
+ */
+app.get('/candidates', candidates.get);
 
 app.listen(port, function(){
   console.log('Server is listening on port %d', port);

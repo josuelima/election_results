@@ -3,11 +3,12 @@
 var express = require('express');
 var app     = express();
 var server  = require('http').Server(app);
-var io      = require('socket.io')(server);
+var io      = require('socket.io').listen(server);
 var port    = 3000;
 
-var subSocket = require('./lib/subscribe');
-var votes     = require('./models/vote');
+var subSocket  = require('./lib/subscribe');
+var votes      = require('./models/vote');
+var candidates = require('./models/candidate');
 
 server.listen(port, function(){
   console.log('Server is listening on port %d', port);
@@ -23,15 +24,15 @@ app.get('/', function(req, res){
 });
 
 io.sockets.on('connection', function(socket){
-  votes.get(function(err, data){
+  candidates.get(function(err, data){
     if(err) return;
-    data.forEach(function(vote) {
-      socket.emit('vote', vote);
+    data.forEach(function(candidate) {
+      socket.emit('candidates', candidate);
     });
   });
 });
 
-subSocket.on('message', function(message){
-  io.sockets.emit('vote', message);
+subSocket.on('message', function(channel, message){
+  console.log('received for ' + channel + ': ' + message);
+  //io.sockets.emit('candidates', message);
 });
-

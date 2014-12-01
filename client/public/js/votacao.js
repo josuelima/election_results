@@ -4,8 +4,8 @@ $(function(){
 
   var socket = io.connect();
 
-  socket.on('vote', function(vote){
-    console.log(vote.candidate);
+  socket.on('candidates', function(candidate){
+    console.log(candidate);
   });
 
 });

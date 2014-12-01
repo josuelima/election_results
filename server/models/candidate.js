@@ -5,21 +5,21 @@ var socket = require('../lib/socket');
 
 /**
  * Save cadidate to database
- * @param {Array} votes
+ * @param {JSON} candidate
  */
 exports.save = function(candidate, callback) {
-  db.lpush('votes', JSON.stringify(candidate), function(err){
+  db.lpush('candidates', JSON.stringify(candidate), function(err){
     if(err) return callback(err, null);
     callback(null, null)
   });
 };
 
 /**
- * Send votes to socket
- * @param {Array} votes
+ * Send candidate to subscribers
+ * @param {JSON} candidate
  */
-exports.send = function(votes, callback) {
-  votes.forEach(socket.send);
+exports.send = function(candidate, callback) {
+  socket.send('candidates', candidate);
 };
 
 /**
@@ -27,7 +27,7 @@ exports.send = function(votes, callback) {
  * @return {JSON}
  */
 exports.get = function(callback) {
-  db.lrange('votes', 0, -1, function(err, data){
+  db.lrange('candidates', 0, -1, function(err, data){
     if(err) return callback(err, null);
     callback(null, data.map(JSON.parse));
   });

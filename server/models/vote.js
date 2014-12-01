@@ -18,11 +18,13 @@ exports.save = function(votes, callback) {
 };
 
 /**
- * Send votes to socket
+ * Send votes to subscribers
  * @param {Array} votes
  */
 exports.send = function(votes, callback) {
-  votes.forEach(socket.send);
+  votes.forEach(function(vote) {
+    socket.send('votes', vote);
+  });
 };
 
 /**
