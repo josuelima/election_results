@@ -5,7 +5,6 @@ var vote = require('../models/vote');
 
 /**
  * Uses model to save votes
- * @return {[type]}
  */
 exports.save = function(req, res, next) {
   var votesList = _.clone(req.body);
