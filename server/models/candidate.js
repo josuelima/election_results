@@ -8,8 +8,9 @@ var socket       = require('../lib/socket');
  * @param {JSON} candidate
  */
 exports.save = function(candidate, callback) {
+  console.log(candidate);
   // create candidate tag
-  candidate['tag'] = parameterize(candidate['name']);
+  candidate['tag'] = parameterize(candidate.name);
 
   db.lpush('candidates', JSON.stringify(candidate), function(err){
     if(err) return callback(err, null);

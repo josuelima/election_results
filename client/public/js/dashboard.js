@@ -2,8 +2,8 @@
 
 $(function(){
 
-  var candidate_template = ['<div class="col-md-6">',
-          '<div id="%tag%" class="box-rounded">',
+  var candidate_template = ['<div class="col-md-6" id="candidate_%tag%" style="display:none;">',
+          '<div class="box-rounded">',
             '<div class="row">',
               '<div class="col-md-4">',
                 '<img src="%img%" class="img-circle" />',
@@ -38,6 +38,7 @@ $(function(){
 
   socket.on('candidates', function(candidate){
     $('#candidates-list').append(template(candidate));
+    $('#candidate_' + candidate.tag).fadeIn(500);
   });
 
   var clear_form = function(){
@@ -58,11 +59,11 @@ $(function(){
     if(name.val() == '' || url.val() == '')
       return;
 
-    var params = {
-      json: {name: name.val(), img: url.val()},
-      method: 'POST',
-      url: 'http://localhost:8080/candidates'
-    }
+    $.ajax('http://localhost:8080/candidates', {
+      data: JSON.stringify({name: name.val(), img: url.val()}),
+      contentType: 'application/json',
+      type: 'POST'
+    });
 
     $('#add_candidate').modal('hide');
     clear_form();

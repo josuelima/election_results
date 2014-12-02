@@ -15,6 +15,15 @@ server.listen(port, function(){
 });
 
 /**
+ *  Allows third party clients to connect to the socket server
+ */
+app.use(function(request, response, next) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
+/**
  * Define where to look for static files
  */
 app.use(express.static('public'));

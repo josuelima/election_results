@@ -13,6 +13,15 @@ var port       = 8080;
 app.use(parser.json());
 
 /**
+ *  Allows third party clients to connect to the socket server
+ */
+app.use(function(request, response, next) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
+/**
  * Saves votes and broadcast to subscribers
  */
 app.post('/votes', votes.save, votes.send);
