@@ -1,13 +1,16 @@
 'use strict';
-
-var db     = require('../lib/db');
-var socket = require('../lib/socket');
+var parameterize = require('parameterize')
+var db           = require('../lib/db');
+var socket       = require('../lib/socket');
 
 /**
  * Save cadidate to database
  * @param {JSON} candidate
  */
 exports.save = function(candidate, callback) {
+  // create candidate tag
+  candidate['tag'] = parameterize(candidate['name']);
+
   db.lpush('candidates', JSON.stringify(candidate), function(err){
     if(err) return callback(err, null);
     callback(null, null)
