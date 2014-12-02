@@ -3,6 +3,7 @@
 $(function(){
 
   var total_votes = 0;
+  var admin_view  = $('#admin_view').val();
 
   var candidate_template = ['<div class="col-md-6" id="candidate_%tag%" style="display:none;">',
           '<div class="box-rounded">',
@@ -16,9 +17,8 @@ $(function(){
                   '<div class="progress-bar progress-bar-striped active share_%tag%" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%">',
                   '</div>',
                 '</div>',
-                '<div>',
+                '<div class="partial_%tag%">',
                   '<p class="votes_%tag%"><strong>0 votes</strong> / 0%</p>',
-                  '<button type="button" class="btn btn btn-sm btn_candidate" value="%tag%">+1 Vote</button>',
                 '</div>',
               '</div>',
             '</div>',
@@ -63,6 +63,12 @@ $(function(){
 
   socket.on('candidates', function(candidate){
     $('#candidates-list').append(template(candidate));
+
+    if(admin_view == "true")
+      $('.partial_' + candidate.tag)
+        .append('<button type="button" class="btn btn btn-sm btn_candidate" \
+                 value="' + candidate.tag + '">+1 Vote</button>');
+
     $('#candidate_' + candidate.tag).fadeIn(500);
   });
 

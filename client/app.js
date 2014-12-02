@@ -29,10 +29,19 @@ app.use(function(request, response, next) {
 app.use(express.static('public'));
 
 /**
- * Main page
+ * For users watching
  */
 app.get('/', function(req, res){
-  res.sendfile('./public/index.html');
+  res.locals = {admin: false};
+  res.render('main.ejs');
+});
+
+/**
+ * For admins (add votes and candidates)
+ */
+app.get('/dashboard', function(req, res){
+  res.locals = {admin: true};
+  res.render('main.ejs');
 });
 
 /**
