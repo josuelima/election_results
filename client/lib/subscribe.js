@@ -9,8 +9,4 @@ socket.on('error', function(err){
   throw err;
 });
 
-socket.on('message', function(msg){
-  console.log(msg.toString());
-});
-
 module.exports = socket;

@@ -41,6 +41,10 @@ $(function(){
     $('#candidate_' + candidate.tag).fadeIn(500);
   });
 
+  socket.on('votes', function(votes){
+    console.log(votes);
+  });
+
   var clear_form = function(){
     $('#input_candidate_name').val('');
     $('#input_candidate_url').val('');

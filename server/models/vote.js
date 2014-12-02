@@ -2,18 +2,16 @@
 
 var db     = require('../lib/db');
 var socket = require('../lib/socket');
+var _      = require('underscore');
 
 /**
  * Save votes to database
  * @param {Array} votes
  */
-exports.save = function(votes, callback) {
-  if(votes.length == 0) return callback(null, null);
-  var vote = votes.pop();
-
+exports.save = function(vote, callback) {
   db.lpush('votes', JSON.stringify(vote), function(err){
     if(err) return callback(err, null);
-    exports.save(votes, callback);
+    callback(null, null);
   });
 };
 
@@ -21,9 +19,11 @@ exports.save = function(votes, callback) {
  * Send votes to subscribers
  * @param {Array} votes
  */
-exports.send = function(votes, callback) {
-  votes.forEach(function(vote) {
-    socket.send('votes', vote);
+exports.send = function(callback) {
+  var votes = exports.get(function(err, data) {
+    if(err) return callback(err, null);
+
+    socket.send('votes', JSON.stringify(data));
   });
 };
 
@@ -34,6 +34,14 @@ exports.send = function(votes, callback) {
 exports.get = function(callback) {
   db.lrange('votes', 0, -1, function(err, data){
     if(err) return callback(err, null);
-    callback(null, data.map(JSON.parse));
+
+    /**
+     * Sum candidates votes
+     */
+    var totals = _.countBy(data.map(JSON.parse), function(vote){
+      return vote.candidate_tag;
+    });
+
+    callback(null, totals);
   });
 };

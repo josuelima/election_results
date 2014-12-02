@@ -4,7 +4,7 @@ var request = require('request');
 
 /**
  * Get candidates from server
- * @param  {Function} callback
+ * @param {Function} callback
  */
 exports.get = function(callback) {
   request('http://localhost:8080/candidates', function(err, response, body){
