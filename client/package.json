@@ -6,11 +6,9 @@
   "author": "Josue Lima [josuedsi@gmail.com]",
   "license": "MIT",
   "dependencies": {
-    "underscore": "~1.7.0",
-    "redis": "~0.12.1",
     "axon": "~2.0.1",
     "express": "~4.10.4",
-    "body-parser": "~1.9.3",
-    "parameterize": "0.0.7"
+    "request": "~2.49.0",
+    "socket.io": "~1.2.1"
   }
 }

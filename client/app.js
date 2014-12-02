@@ -15,14 +15,20 @@ server.listen(port, function(){
 });
 
 /**
- * define where to look for static files
+ * Define where to look for static files
  */
 app.use(express.static('public'));
 
+/**
+ * Main page
+ */
 app.get('/', function(req, res){
   res.sendfile('./public/index.html');
 });
 
+/**
+ * Get initial candidates and votes
+ */
 io.sockets.on('connection', function(socket){
   candidates.get(function(err, data){
     if(err) return;
@@ -32,7 +38,9 @@ io.sockets.on('connection', function(socket){
   });
 });
 
+/**
+ * Wait for new messages
+ */
 subSocket.on('message', function(channel, message){
-  console.log('received for ' + channel + ': ' + message);
-  //io.sockets.emit('candidates', message);
+  io.sockets.emit(channel, message);
 });
