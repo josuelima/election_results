@@ -2,6 +2,8 @@
 
 $(function(){
 
+  var total_votes = 0;
+
   var candidate_template = ['<div class="col-md-6" id="candidate_%tag%" style="display:none;">',
           '<div class="box-rounded">',
             '<div class="row">',
@@ -11,11 +13,12 @@ $(function(){
               '<div class="col-md-7">',
                 '<h2>%name%</h2>',
                 '<div class="progress">',
-                  '<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">',
+                  '<div class="progress-bar progress-bar-striped active share_%tag%" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%">',
                   '</div>',
                 '</div>',
                 '<div>',
-                  '<strong>0 votes</strong> / 0%',
+                  '<p class="votes_%tag%"><strong>0 votes</strong> / 0%</p>',
+                  '<button type="button" class="btn btn btn-sm btn_candidate" value="%tag%">+1 Vote</button>',
                 '</div>',
               '</div>',
             '</div>',
@@ -32,6 +35,28 @@ $(function(){
   };
 
   /**
+   * Votes
+   */
+
+  var update_votes = function(candidate, votes){
+    var share = (votes * 100) / total_votes;
+    $('.votes_' + candidate)
+          .html("<strong>" + votes + " votes</strong> / " + share.toFixed(2) + "%</p>");
+    $('.share_' + candidate).css('width', share + '%');
+  }
+
+  /**
+   * Vote button
+   */
+  $('#candidates-list').on('click', 'button.btn_candidate', function(){
+    $.ajax('http://localhost:8080/votes', {
+      data: JSON.stringify({candidate_tag: this.value}),
+      contentType: 'application/json',
+      type: 'POST'
+    });
+  });
+
+  /**
    * Sockets interaction
    */
   var socket = io.connect();
@@ -42,7 +67,13 @@ $(function(){
   });
 
   socket.on('votes', function(votes){
-    console.log(votes);
+    total_votes = _.map(votes, function(total, candidate_tag){
+                    return total;
+                  }).reduce(function(acc, total) { return acc + total; },0);
+
+    _.each(votes, function(count, candidate){
+      update_votes(candidate, count);
+    });
   });
 
   var clear_form = function(){

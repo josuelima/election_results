@@ -45,6 +45,11 @@ io.sockets.on('connection', function(socket){
       socket.emit('candidates', candidate);
     });
   });
+
+  votes.get(function(err, data){
+    if(err) return;
+    socket.emit('votes', data);
+  });
 });
 
 /**

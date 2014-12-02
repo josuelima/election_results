@@ -22,8 +22,7 @@ exports.save = function(vote, callback) {
 exports.send = function(callback) {
   var votes = exports.get(function(err, data) {
     if(err) return callback(err, null);
-
-    socket.send('votes', JSON.stringify(data));
+    socket.send('votes', data);
   });
 };
 
