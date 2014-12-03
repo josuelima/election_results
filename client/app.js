@@ -9,6 +9,7 @@ var port    = 3000;
 var subSocket  = require('./lib/subscribe');
 var votes      = require('./models/vote');
 var candidates = require('./models/candidate');
+var api_url    = 'http://localhost:8000';
 
 server.listen(port, function(){
   console.log('Server is listening on port %d', port);
@@ -32,7 +33,7 @@ app.use(express.static('public'));
  * For users watching
  */
 app.get('/', function(req, res){
-  res.locals = {admin: false};
+  res.locals = {admin: false, api_url: api_url};
   res.render('main.ejs');
 });
 
@@ -40,7 +41,7 @@ app.get('/', function(req, res){
  * For admins (add votes and candidates)
  */
 app.get('/dashboard', function(req, res){
-  res.locals = {admin: true};
+  res.locals = {admin: true, api_url: api_url};
   res.render('main.ejs');
 });
 
@@ -48,14 +49,14 @@ app.get('/dashboard', function(req, res){
  * Get initial candidates and votes
  */
 io.sockets.on('connection', function(socket){
-  candidates.get(function(err, data){
+  candidates.get(api_url, function(err, data){
     if(err) return;
     data.forEach(function(candidate) {
       socket.emit('candidates', candidate);
     });
   });
 
-  votes.get(function(err, data){
+  votes.get(api_url, function(err, data){
     if(err) return;
     socket.emit('votes', data);
   });

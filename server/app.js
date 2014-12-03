@@ -5,7 +5,7 @@ var parser     = require('body-parser');
 var votes      = require('./controllers/votes');
 var candidates = require('./controllers/candidates');
 var app        = express();
-var port       = 8080;
+var port       = process.env.PORT || 8000;
 
 /**
  * Middleware to parse all requests to json

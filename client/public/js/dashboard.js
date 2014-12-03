@@ -4,6 +4,7 @@ $(function(){
 
   var total_votes = 0;
   var admin_view  = $('#admin_view').val();
+  var api_url     = $('#api_url').val();
 
   var candidate_template = ['<div class="col-md-6" id="candidate_%tag%" style="display:none;">',
           '<div class="box-rounded">',
@@ -49,7 +50,7 @@ $(function(){
    * Vote button
    */
   $('#candidates-list').on('click', 'button.btn_candidate', function(){
-    $.ajax('http://localhost:8080/votes', {
+    $.ajax(api_url + '/votes', {
       data: JSON.stringify({candidate_tag: this.value}),
       contentType: 'application/json',
       type: 'POST'
@@ -100,7 +101,7 @@ $(function(){
     if(name.val() == '' || url.val() == '')
       return;
 
-    $.ajax('http://localhost:8080/candidates', {
+    $.ajax(api_url + '/candidates', {
       data: JSON.stringify({name: name.val(), img: url.val()}),
       contentType: 'application/json',
       type: 'POST'
