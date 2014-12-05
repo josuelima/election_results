@@ -40,5 +40,11 @@ The dashboard page also lists the candidates and votes, but has options to regis
 
 ![dashboard](http://s28.postimg.org/76ugesail/dash.png)
 
+## Install & Run
 
+In order to run this project you need to have both [Node.js](http://nodejs.org/) and [Redis](http://redis.io) installed on your machine, then:
 
+1. Clone this repo into you machine
+2. On the server folder run: `node install` `node app`
+3. On the client folder run: `node install` `node app`
+4. Go to your browser and access http://localhost:3000 (/dashboard to add candidates and votes)
